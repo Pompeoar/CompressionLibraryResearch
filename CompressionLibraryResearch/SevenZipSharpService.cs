@@ -12,6 +12,7 @@ namespace ZipAndEncrypt
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Environment.Is64BitProcess ? "x64" : "x86", "7z.dll");
             SevenZipBase.SetLibraryPath(path);
         }
+
         public static void CompressFile(string destination, string source)
         {
             SetSevenZipSharpBasePath();
@@ -59,6 +60,7 @@ namespace ZipAndEncrypt
 
             }
         }
+
         public static void CompressFileStreamMultiVolume(string destination, string source, int volumeSize)
         {
             SetSevenZipSharpBasePath();

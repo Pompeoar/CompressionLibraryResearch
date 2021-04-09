@@ -1,17 +1,28 @@
-﻿using SharpCompress.Archives;
-using SharpCompress.Archives.Zip;
+﻿using Ionic.BZip2;
 using SharpCompress.Common;
+using SharpCompress.Writers;
+using System.IO;
 
 namespace ZipAndEncrypt
 {
     public class SharpCompressService
     {
-        public static void ZipFile(string fileLocation, string fileDestination)
+        public static void CompressFilesInDirectory(string sourcePath, string fileDestination)
         {
-            using (var archive = ZipArchive.Create())
+            using (Stream stream = File.OpenWrite(fileDestination))
+            using (var writer = WriterFactory.Open(stream, ArchiveType.Tar, new WriterOptions(CompressionType.GZip)))
             {
-                archive.AddAllFromDirectory(fileLocation);
-                archive.SaveTo(fileDestination, CompressionType.Deflate);
+                writer.WriteAll(sourcePath, " * ", SearchOption.AllDirectories);
+            }
+        }
+
+        public static void CompressFile(string sourceFile, string fileDestination)
+        {
+            using (var inputStream = File.OpenRead(sourceFile))
+            using (Stream stream = File.OpenWrite(fileDestination))            
+            using (var writer = WriterFactory.Open(stream, ArchiveType.Tar, new WriterOptions(CompressionType.GZip)))
+            {
+                writer.Write(sourceFile, inputStream);
             }
         }
     }
