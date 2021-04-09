@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using CompressionLibraryResearchTests;
+using FluentAssertions;
 using System;
 using System.IO;
 using System.Linq;
@@ -10,68 +11,28 @@ using ZipAndEncrypt;
 
 namespace ZipAndEncryptTests
 {
-    public class SevenZipSharpTests : IDisposable
-    {
-        private string smallFile = "benchmark_phonebook.json";
-        private string largeFile = "city of towers.db";
-        private int volumeSize = 2_000_000;
-        private bool cleanupAfterTests = true;
-        private bool useTempFolder = false;
-        public SevenZipSharpTests()
-        {
-            inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Data\Raw");
-            outputDirectory = useTempFolder 
-                ? Path.Combine(Path.GetTempPath(), "output")
-                : Path.Combine(Directory.GetCurrentDirectory(), "output");
-            outputZipFile = Path.Join(outputDirectory, "tmp.7z");
-            Directory.CreateDirectory(outputDirectory);
-        }
-        //C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\bin\Debug\netcoreapp2.1\Data\Raw
-        //C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\bin\Debug\Data\Raw
-        private string outputDirectory { get; }
-        private string outputZipFile { get; }
-
-        private string inputDirectory { get; }
-        public void Dispose()
-        {
-
-            if (cleanupAfterTests && Directory.Exists(outputDirectory))
-            {
-                // sometimes the sfx test locks the .exe file for a few milliseconds.
-                for (var n = 0; n < 10; n++)
-                {
-                    try
-                    {
-                        Directory.Delete(outputDirectory, true);
-                        break;
-                    }
-                    catch
-                    {
-                        Thread.Sleep(20);
-                    }
-                }
-            }
-        }
+    public class SevenZipSharpTests : TestBase
+    { 
 
         [Fact]
         public async Task ZipAndSave()
         {
             // Arrange
-            var unzippedFile = Path.Combine(inputDirectory, largeFile);
-            if (File.Exists(outputZipFile))
+            var unzippedFile = Path.Combine(InputDirectory, LargeFile);
+            if (File.Exists(OutputZipFile))
             {
-                File.Delete(outputZipFile);
+                File.Delete(OutputZipFile);
             }
 
             // Act
-            SevenZipSharpService.CompressFile(outputZipFile, unzippedFile);
+            SevenZipSharpService.CompressFile(OutputZipFile, unzippedFile);
 
-            File.Exists(outputZipFile)
+            File.Exists(OutputZipFile)
                 .Should()
                 .BeTrue();
 
             var originalSize = new FileInfo(unzippedFile).Length;
-            new FileInfo(outputZipFile).Length
+            new FileInfo(OutputZipFile).Length
                 .Should()
                 .BeGreaterThan(0)
                 .And
@@ -84,23 +45,23 @@ namespace ZipAndEncryptTests
         {
             // Arrange
             // Act
-            SevenZipSharpService.CompressDirectoryMultiVolume(outputZipFile, inputDirectory, volumeSize);
+            SevenZipSharpService.CompressDirectoryMultiVolume(OutputZipFile, InputDirectory, VolumeSize);
 
             // Assert
             // Should split Multi-Volume            
-            Directory.GetFiles(outputDirectory).Length
+            Directory.GetFiles(OutputDirectory).Length
                 .Should()
-                .BeGreaterThan(Directory.GetFiles(inputDirectory).Length);
+                .BeGreaterThan(Directory.GetFiles(InputDirectory).Length);
 
-            var newVolumes = new DirectoryInfo(outputDirectory).EnumerateFiles();
+            var newVolumes = new DirectoryInfo(OutputDirectory).EnumerateFiles();
             foreach (var volume in newVolumes)
             {
                 volume.Length
                     .Should()
-                    .BeLessOrEqualTo(volumeSize);
+                    .BeLessOrEqualTo(VolumeSize);
             }
             // Should Compress
-            var originalSize = new DirectoryInfo(inputDirectory)
+            var originalSize = new DirectoryInfo(InputDirectory)
                 .EnumerateFiles()
                 .Sum(file => file.Length);
             var compressedSize = newVolumes
@@ -117,23 +78,23 @@ namespace ZipAndEncryptTests
         public async Task ZipAndEncryptFileBySplitVolume()
         {
             // Arrange
-            var unzippedFile = Path.Combine(inputDirectory, largeFile);
+            var unzippedFile = Path.Combine(InputDirectory, LargeFile);
 
             // Act
-            SevenZipSharpService.CompressFileMultiVolume(outputZipFile, unzippedFile, volumeSize);
+            SevenZipSharpService.CompressFileMultiVolume(OutputZipFile, unzippedFile, VolumeSize);
 
             // Assert
             // Should split Multi - Volume
-            Directory.GetFiles(outputDirectory).Length
+            Directory.GetFiles(OutputDirectory).Length
                 .Should()
                 .BeGreaterThan(1);
 
-            var newVolumes = new DirectoryInfo(outputDirectory).EnumerateFiles();
+            var newVolumes = new DirectoryInfo(OutputDirectory).EnumerateFiles();
             foreach (var volume in newVolumes)
             {
                 volume.Length
                     .Should()
-                    .BeLessOrEqualTo(volumeSize);
+                    .BeLessOrEqualTo(VolumeSize);
             }
 
             // Should Compress            
@@ -151,13 +112,13 @@ namespace ZipAndEncryptTests
         public async Task ZipAndEncryptFileStream()
         {
             // Arrange
-            var unzippedFile = Path.Combine(inputDirectory, largeFile);
+            var unzippedFile = Path.Combine(InputDirectory, LargeFile);
 
             // Act
-            SevenZipSharpService.CompressAndEncryptFileStream(outputZipFile, unzippedFile);
+            SevenZipSharpService.CompressAndEncryptFileStream(OutputZipFile, unzippedFile);
 
             // Assert           
-            File.Exists(outputZipFile)
+            File.Exists(OutputZipFile)
              .Should()
              .BeTrue();
         }
@@ -166,14 +127,14 @@ namespace ZipAndEncryptTests
         public async Task ZipAndEncryptFileStreamByVolume()
         {
             // Arrange
-            var unzippedFile = Path.Combine(inputDirectory, largeFile);
+            var unzippedFile = Path.Combine(InputDirectory, LargeFile);
 
             // Act
-            SevenZipSharpService.CompressFileStreamMultiVolume(outputZipFile, unzippedFile, volumeSize);
+            SevenZipSharpService.CompressFileStreamMultiVolume(OutputZipFile, unzippedFile, VolumeSize);
 
             // Assert           
             // Should split Multi - Volume
-            Directory.GetFiles(outputDirectory).Length
+            Directory.GetFiles(OutputDirectory).Length
                 .Should()
                 .BeGreaterThan(1);
         }

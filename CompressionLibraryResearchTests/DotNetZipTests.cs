@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using CompressionLibraryResearchTests;
+using FluentAssertions;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,43 +9,18 @@ using ZipAndEncrypt;
 
 namespace ZipAndEncryptTests
 {
-    public class DotNetZipTests
+    public class DotNetZipTests : TestBase
     {
         [Fact]
         public async Task ZipAndSave()
         {
-            // Arrange
-            var sourceDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Data\Raw)");
-            var sourceFile = Path.Combine(sourceDirectory, "city of towers.db");
-            var directory = Path.GetTempPath();
-            var zip = Path.Join(directory, "demo.zip");
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
+            // Arrange          
             // Act
-            DotNetZip.CompressFile(sourceFile, zip);
-            File.Exists(zip)
+            DotNetZip.CompressFile(SmallFile, OutputZipFile);
+            File.Exists(OutputZipFile)
                 .Should()
                 .BeTrue();
 
-            // Sometimes the Sfx test locks the .exe file for a few milliseconds.
-            if (Directory.Exists(directory))
-            {
-                for (var n = 0; n < 10; n++)
-                {
-                    try
-                    {
-                        Directory.Delete(directory, true);
-                        break;
-                    }
-                    catch
-                    {
-                        Thread.Sleep(20);
-                    }
-                }
-            }
         }
 
         [Fact]

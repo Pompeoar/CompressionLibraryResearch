@@ -26,23 +26,23 @@ namespace ZipAndEncrypt
         [Benchmark(Baseline = true)]
         public void CompressLargeFileBenchmark()
         {
-            var source = Path.Combine(Directory.GetCurrentDirectory(), @"Raw\Data");
-            var directory = Path.GetTempPath();
-            var destination = Path.Join(directory, "demo.zip"); ;
+            var inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Raw\Data");
+            var outputDirectory = Path.GetTempPath();
+            var outputFile = Path.Join(outputDirectory, "demo.zip"); ;
 
-            if (!Directory.Exists(directory))
+            if (!Directory.Exists(outputDirectory))
             {
-                Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(outputDirectory);
             }
 
-            CompressFile(source, destination);
+            CompressFile(inputDirectory, outputFile);
 
             // Sometimes the Sfx test locks the .exe file for a few milliseconds.
             for (var n = 0; n < 10; n++)
             {
                 try
                 {
-                    Directory.Delete(directory, true);
+                    Directory.Delete(outputDirectory, true);
                     break;
                 }
                 catch
@@ -55,22 +55,22 @@ namespace ZipAndEncrypt
         [Benchmark]
         public void CompressSmallFileBenchmark()
         {
-            var source = @"C:\Dev\ZipTests\worlds-20210318-050007\worlds\benchmark_phonebook.json";
-            var directory = Path.GetTempPath();
-            var destination = Path.Join(directory, "demo.zip"); ;
+            var inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Raw\Data");
+            var outputDirectory = Path.GetTempPath();
+            var destination = Path.Join(outputDirectory, "demo.zip"); ;
 
-            if (!Directory.Exists(directory))
+            if (!Directory.Exists(outputDirectory))
             {
-                Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(outputDirectory);
             }
-            CompressFile(source, destination);
+            CompressFile(inputDirectory, destination);
 
             // Sometimes the Sfx test locks the .exe file for a few milliseconds.
             for (var n = 0; n < 10; n++)
             {
                 try
                 {
-                    Directory.Delete(directory, true);
+                    Directory.Delete(outputDirectory, true);
                     break;
                 }
                 catch
