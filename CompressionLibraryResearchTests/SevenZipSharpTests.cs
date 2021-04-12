@@ -15,14 +15,31 @@ namespace ZipAndEncryptTests
         public async Task ZipAndSave()
         {
             // Arrange
-            var unzippedFile = Path.Combine(InputDirectory, LargeFile);
-            if (File.Exists(OutputZipFile))
-            {
-                File.Delete(OutputZipFile);
-            }
+            var unzippedFile = Path.Combine(InputDirectory, LargeFile);          
 
             // Act
             SevenZipSharpService.CompressFile(OutputZipFile, unzippedFile);
+
+            File.Exists(OutputZipFile)
+                .Should()
+                .BeTrue();
+
+            var originalSize = new FileInfo(unzippedFile).Length;
+            new FileInfo(OutputZipFile).Length
+                .Should()
+                .BeGreaterThan(0)
+                .And
+                .BeLessThan(originalSize);
+        }
+
+        [Fact]
+        public async Task ZipAndSaveEncryptedByVolume()
+        {
+            // Arrange
+            var unzippedFile = Path.Combine(InputDirectory, LargeFile);
+            
+            // Act
+            SevenZipSharpService.CompressFileEncrypted(OutputZipFile, unzippedFile, VolumeSize);
 
             File.Exists(OutputZipFile)
                 .Should()

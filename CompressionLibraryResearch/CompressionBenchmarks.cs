@@ -116,5 +116,20 @@ namespace CompressionLibraryResearch
             };
             compressor.CompressDirectory(sourceDirectory, destination, "password");
         }
+
+        [Benchmark]
+        public void SevenSharpZip_CompressLargeFile_NoStream()
+        {
+            var volumeSize = 2_000_000;
+            var inputDirectory = @"C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\Data\Raw\city of towers.db";
+            
+            var destination = Path.GetTempPath();
+            SetSevenZipSharpBasePath();
+            var compressor = new SevenZipCompressor()
+            {
+                VolumeSize = volumeSize
+            };
+            compressor.CompressFilesEncrypted(destination, "password", inputDirectory);
+        }
     }
 }

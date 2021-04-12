@@ -22,6 +22,16 @@ namespace CompressionLibraryResearch
             compressor.CompressFiles(destination, source);
         }
 
+        public static void CompressFileEncrypted(string destination, string source, int volumeSize)
+        {
+            SetSevenZipSharpBasePath();
+            var compressor = new SevenZipCompressor()
+            {
+                VolumeSize = volumeSize
+            };
+            compressor.CompressFilesEncrypted(destination, "password", source);
+        }
+
         public static void CompressDirectoryMultiVolume(string destination, string source, int volumeSize)
         {
             SetSevenZipSharpBasePath();
