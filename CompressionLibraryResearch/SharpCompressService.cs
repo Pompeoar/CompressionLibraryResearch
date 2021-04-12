@@ -3,7 +3,7 @@ using SharpCompress.Common;
 using SharpCompress.Writers;
 using System.IO;
 
-namespace ZipAndEncrypt
+namespace CompressionLibraryResearch
 {
     public class SharpCompressService
     {

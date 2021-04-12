@@ -1,13 +1,10 @@
-﻿using CompressionLibraryResearchTests;
+﻿using CompressionLibraryResearch;
+using CompressionLibraryResearchTests;
 using FluentAssertions;
-using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using ZipAndEncrypt;
 
 namespace ZipAndEncryptTests
 {
@@ -155,19 +152,30 @@ namespace ZipAndEncryptTests
                 .Should()
                 .BeGreaterThan(sourceFiles.Length);
             var newFilesInfo = newFiles.Select(file => new FileInfo(file)); 
-            var originalSize = sourceFiles.Select(file => new FileInfo(file)).Sum(file => file.Length);
+            var originalSize = sourceFiles
+                .Select(file => new FileInfo(file))
+                .Sum(file => file.Length);
             newFilesInfo.Sum(file => file.Length)
                 .Should()
                 .BeLessThan(originalSize);
             foreach (var newfile in newFilesInfo)
-            {
-                
+            {                
                 newfile.Length
                     .Should()
                     .BeLessOrEqualTo(VolumeSize);
             }
-
         }
 
+        [Fact]
+        public async Task BenchmarkDictionaryTest()
+        {
+            // Arrange                        
+            var sut = new CompressionBenchmarks();
+
+            // Act
+            sut.SevenSharpZip_CompressDictionaryBenchmark();
+
+            // Assert           
+        }
     }
 }

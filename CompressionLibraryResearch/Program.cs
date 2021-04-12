@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BenchmarkDotNet.Running;
 
 namespace CompressionLibraryResearch
 {
@@ -6,7 +6,8 @@ namespace CompressionLibraryResearch
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            BenchmarkRunner.Run<DotNetZip>();
+            BenchmarkRunner.Run<SevenZipSharpService>();
         }
     }
 }

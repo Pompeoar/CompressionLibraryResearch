@@ -1,10 +1,9 @@
-﻿using CompressionLibraryResearchTests;
+﻿using CompressionLibraryResearch;
+using CompressionLibraryResearchTests;
 using FluentAssertions;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using ZipAndEncrypt;
 
 
 namespace ZipAndEncryptTests
@@ -26,10 +25,10 @@ namespace ZipAndEncryptTests
         [Fact]
         public async Task LargeFileBenchmarkWorks()
         {
-            var sut = new DotNetZip();
+            var sut = new CompressionBenchmarks();
             for (var i = 0; i < 10; i++)
             {
-                sut.CompressLargeFileBenchmark();
+                sut.DotNetZip_CompressLargeFileBenchmark();
 
             }
         }
@@ -37,11 +36,10 @@ namespace ZipAndEncryptTests
         [Fact]
         public async Task SmallFileBenchmarkWorks()
         {
-            var sut = new DotNetZip();
+            var sut = new CompressionBenchmarks();
             for (var i = 0; i < 10; i++)
             {
-                sut.CompressSmallFileBenchmark();
-
+                sut.DotNetZip_CompressSmallFileBenchmark();
             }
         }
     }

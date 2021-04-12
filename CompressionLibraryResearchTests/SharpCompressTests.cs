@@ -1,9 +1,9 @@
+using CompressionLibraryResearch;
 using CompressionLibraryResearchTests;
 using FluentAssertions;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
-using ZipAndEncrypt;
 
 namespace ZipAndEncryptTests
 {

@@ -1,12 +1,15 @@
-﻿using SevenZip;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Order;
+using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace ZipAndEncrypt
+namespace CompressionLibraryResearch
 {
-    public static class SevenZipSharpService
+  
+    public class SevenZipSharpService
     {
         private static void SetSevenZipSharpBasePath()
         {
@@ -100,5 +103,6 @@ namespace ZipAndEncrypt
             compressor.CompressStreamDictionary(streamDictionary, destination, "password");
           
         }
+
     }
 }
