@@ -11,7 +11,7 @@ namespace CompressionLibraryResearchTests
         internal string SmallFile { get; }
         internal string LargeFile { get; }
         internal int VolumeSize = 2_000_000;
-        internal bool CleanupAfterTests = true;
+        internal bool CleanupAfterTests = false;
         internal bool useTempFolder = false;
         internal string OutputDirectory { get; }
         internal string OutputZipFile { get; }
@@ -25,9 +25,23 @@ namespace CompressionLibraryResearchTests
                 ? Path.Combine(Path.GetTempPath(), "output")
                 : Path.Combine(Directory.GetCurrentDirectory(), "output");
             OutputZipFile = Path.Join(OutputDirectory, "temp.tgz");
-            Directory.CreateDirectory(OutputDirectory);
             SmallFile = Path.Join(InputDirectory, "benchmark_phonebook.json");
             LargeFile = Path.Join(InputDirectory, "city of towers.db");
+            SetupOutputDirectory();
+
+        }
+
+        private void SetupOutputDirectory()
+        {
+            // Sometimes we don't clean up while debugging. This ensures a fresh directory. 
+            if (!CleanupAfterTests && Directory.Exists(OutputDirectory))
+            {
+                Directory.Delete(OutputDirectory, true);
+            }
+            if (!Directory.Exists(OutputDirectory))
+            {
+                Directory.CreateDirectory(OutputDirectory);
+            }
         }
 
         public void Dispose()

@@ -1,5 +1,6 @@
 ﻿using SevenZip;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -78,6 +79,26 @@ namespace ZipAndEncrypt
                 }
 
             }           
+        }
+
+        public static void CompressDictionary(string destination, IList<string> sourceFiles, int volumeSize)
+        {
+            SetSevenZipSharpBasePath();
+            var compressor = new SevenZipCompressor()
+            {
+                VolumeSize = volumeSize,
+                CompressionMode = CompressionMode.Create,
+                DirectoryStructure = false
+            };
+            var streamDictionary = new Dictionary<string, Stream>();
+            foreach (var file in sourceFiles)
+            {
+                var info = new FileInfo(file).Name;
+                streamDictionary.Add(info, File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+            }
+
+            compressor.CompressStreamDictionary(streamDictionary, destination, "password");
+          
         }
     }
 }

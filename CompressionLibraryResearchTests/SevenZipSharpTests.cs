@@ -139,5 +139,35 @@ namespace ZipAndEncryptTests
                 .BeGreaterThan(1);
         }
 
+        [Fact]
+        public async Task ZipAndEncryptFileStreamDictionaryByVolume()
+        {
+            // Arrange            
+            var sourceFiles = Directory.GetFiles(InputDirectory);
+
+            // Act
+            SevenZipSharpService.CompressDictionary(OutputZipFile, sourceFiles, VolumeSize);
+
+            // Assert           
+            // Should split Multi - Volume
+            var newFiles = Directory.GetFiles(OutputDirectory);
+            newFiles.Length
+                .Should()
+                .BeGreaterThan(sourceFiles.Length);
+            var newFilesInfo = newFiles.Select(file => new FileInfo(file)); 
+            var originalSize = sourceFiles.Select(file => new FileInfo(file)).Sum(file => file.Length);
+            newFilesInfo.Sum(file => file.Length)
+                .Should()
+                .BeLessThan(originalSize);
+            foreach (var newfile in newFilesInfo)
+            {
+                
+                newfile.Length
+                    .Should()
+                    .BeLessOrEqualTo(VolumeSize);
+            }
+
+        }
+
     }
 }
