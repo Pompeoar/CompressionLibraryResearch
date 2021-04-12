@@ -28,7 +28,7 @@ namespace ZipAndEncryptTests
             var sut = new CompressionBenchmarks();
             for (var i = 0; i < 10; i++)
             {
-                sut.DotNetZip_CompressLargeFileBenchmark();
+                sut.DotNetZip_CompressLargeFile();
 
             }
         }
@@ -39,7 +39,7 @@ namespace ZipAndEncryptTests
             var sut = new CompressionBenchmarks();
             for (var i = 0; i < 10; i++)
             {
-                sut.DotNetZip_CompressSmallFileBenchmark();
+                sut.DotNetZip_CompressSmallFile();
             }
         }
     }

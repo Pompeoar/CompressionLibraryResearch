@@ -173,7 +173,7 @@ namespace ZipAndEncryptTests
             var sut = new CompressionBenchmarks();
 
             // Act
-            sut.SevenSharpZip_CompressDictionaryBenchmark();
+            sut.SevenSharpZip_CompressDictionary_Stream();
 
             // Assert           
         }

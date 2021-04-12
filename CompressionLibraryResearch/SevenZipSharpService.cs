@@ -1,6 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Order;
-using SevenZip;
+﻿using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +6,7 @@ using System.Reflection;
 
 namespace CompressionLibraryResearch
 {
-  
+
     public class SevenZipSharpService
     {
         private static void SetSevenZipSharpBasePath()

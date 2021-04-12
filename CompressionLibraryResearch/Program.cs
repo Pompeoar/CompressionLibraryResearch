@@ -6,8 +6,7 @@ namespace CompressionLibraryResearch
     {
         static void Main(string[] args)
         {
-            BenchmarkRunner.Run<DotNetZip>();
-            BenchmarkRunner.Run<SevenZipSharpService>();
+            BenchmarkRunner.Run<CompressionBenchmarks>();            
         }
     }
 }

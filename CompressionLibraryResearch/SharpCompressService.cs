@@ -1,5 +1,4 @@
-﻿using Ionic.BZip2;
-using SharpCompress.Common;
+﻿using SharpCompress.Common;
 using SharpCompress.Writers;
 using System.IO;
 

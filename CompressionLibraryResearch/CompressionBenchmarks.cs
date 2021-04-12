@@ -16,12 +16,12 @@ namespace CompressionLibraryResearch
     {
         private static void SetSevenZipSharpBasePath()
         {
-            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Environment.Is64BitProcess ? "x64" : "x86", "7z.dll");
+            var path = Path.Combine(@"C:\Dev\CompressionLibraryResearch\CompressionLibraryResearch\bin\Release\netcoreapp2.1\x64", "7z.dll");            
             SevenZipBase.SetLibraryPath(path);
         }
 
-        [Benchmark(Baseline = true)]
-        public void DotNetZip_CompressLargeFileBenchmark()
+        [Benchmark]
+        public void DotNetZip_CompressLargeFile()
         {
             var inputDirectory = @"C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\Data\Raw\city of towers.db";
             var outputDirectory = Path.GetTempPath();
@@ -50,7 +50,7 @@ namespace CompressionLibraryResearch
         }
 
         [Benchmark]
-        public void DotNetZip_CompressSmallFileBenchmark()
+        public void DotNetZip_CompressSmallFile()
         {
             var inputDirectory = @"C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\Data\Raw\benchmark_phonebook.json";
             var outputDirectory = Path.GetTempPath();
@@ -79,7 +79,7 @@ namespace CompressionLibraryResearch
 
 
         [Benchmark]
-        public void SevenSharpZip_CompressDictionaryBenchmark()
+        public void SevenSharpZip_CompressDictionary_Stream()
         {
             var volumeSize = 2_000_000;
             var sourceFiles = Directory.GetFiles(@"C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\Data\Raw");
@@ -100,6 +100,21 @@ namespace CompressionLibraryResearch
 
             compressor.CompressStreamDictionary(streamDictionary, destination, "password");
 
+        }
+
+        [Benchmark]
+        public void SevenSharpZip_CompressDictionary_NoStream()
+        {
+            var volumeSize = 2_000_000;
+            var sourceDirectory = @"C:\Dev\CompressionLibraryResearch\CompressionLibraryResearchTests\Data\Raw";
+            var destination = Path.GetTempPath();
+            SetSevenZipSharpBasePath();
+            var compressor = new SevenZipCompressor()
+            {
+                VolumeSize = volumeSize,
+                CompressionMode = CompressionMode.Create
+            };
+            compressor.CompressDirectory(sourceDirectory, destination, "password");
         }
     }
 }
