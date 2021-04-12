@@ -26,7 +26,7 @@ namespace ZipAndEncrypt
         [Benchmark(Baseline = true)]
         public void CompressLargeFileBenchmark()
         {
-            var inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Raw\Data");
+            var inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Data\Raw\city of towers.db");
             var outputDirectory = Path.GetTempPath();
             var outputFile = Path.Join(outputDirectory, "demo.zip"); ;
 
@@ -55,7 +55,7 @@ namespace ZipAndEncrypt
         [Benchmark]
         public void CompressSmallFileBenchmark()
         {
-            var inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Raw\Data");
+            var inputDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Data\Raw\benchmark_phonebook.json");
             var outputDirectory = Path.GetTempPath();
             var destination = Path.Join(outputDirectory, "demo.zip"); ;
 
